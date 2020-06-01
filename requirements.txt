@@ -8,10 +8,10 @@ mccabe==0.6.1
 numpy==1.18.4
 Pillow==7.1.2
 pylint==2.5.2
+scipy==1.4.1
 six==1.15.0
 toml==0.10.1
 torch==1.5.0
 torchvision==0.6.0
-wavefile==1.5
 wincertstore==0.2
 wrapt==1.12.1
