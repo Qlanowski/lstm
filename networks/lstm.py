@@ -5,9 +5,7 @@ class LSTM_fixed_len(torch.nn.Module) :
         super().__init__()
         self.lstm = nn.LSTM(embedding_dim, hidden_dim, batch_first=True)
         self.linear = nn.Linear(hidden_dim, classes)
-        self.dropout = nn.Dropout(0.2)
         
     def forward(self, x, l):
-        x = self.dropout(x)
         lstm_out, (ht, ct) = self.lstm(x)
         return self.linear(ht[-1])
