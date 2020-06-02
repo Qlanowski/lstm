@@ -3,23 +3,31 @@ from scipy.io import wavfile
 from torchvision.datasets import DatasetFolder
 from torch.utils.data import Subset
 from librosa.feature import mfcc
+from torchvision import transforms
+from torch import Tensor
 
 
 def load_wavefile(filepath):
     shape = (20, 40)
     rate, data = wavfile.read(filepath)
-    normalized = data.astype(float) / np.max(data)
+    if np.max(data) == 0:
+        normalized = data.astype(np.float32)
+    else:
+        normalized = data.astype(np.float32) / np.max(data)
     result =  mfcc(normalized, sr=rate, n_mfcc=shape[0])
     if result.shape[1] < shape[1]:
-        return np.concatenate([np.zeros((shape[0], shape[1] - result.shape[1])), result], axis=1)
-    return result[:, :shape[1]]
+        return np.transpose(np.concatenate([np.zeros((shape[0], shape[1] - result.shape[1])), result], axis=1))
+    return np.transpose(result[:, :shape[1]])
 
 
 def load_train():
     return DatasetFolder(
         root="data/train/audio",
         loader=load_wavefile,
-        extensions=".wav"
+        extensions=".wav",
+        transform=transforms.Compose([
+            Tensor
+        ])
     )
 
 
