@@ -8,7 +8,7 @@ from torch import Tensor
 
 
 def load_wavefile(filepath):
-    shape = (20, 40)
+    shape = (30, 45) # (embeding, length)
     rate, data = wavfile.read(filepath)
     if np.max(data) == 0:
         normalized = data.astype(np.float32)
