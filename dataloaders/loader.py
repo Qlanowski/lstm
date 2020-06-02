@@ -2,11 +2,17 @@ import numpy as np
 from scipy.io import wavfile
 from torchvision.datasets import DatasetFolder
 from torch.utils.data import Subset
+from librosa.feature import mfcc
 
 
 def load_wavefile(filepath):
-    _, data = wavfile.read(filepath)
-    return data
+    shape = (20, 40)
+    rate, data = wavfile.read(filepath)
+    normalized = data.astype(float) / np.max(data)
+    result =  mfcc(normalized, sr=rate, n_mfcc=shape[0])
+    if result.shape[1] < shape[1]:
+        return np.concatenate([np.zeros((shape[0], shape[1] - result.shape[1])), result], axis=1)
+    return result[:, :shape[1]]
 
 
 def load_train():
