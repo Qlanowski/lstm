@@ -2,7 +2,7 @@
     "seed": 123,
     "split_frac": 0.7,
     "batch_size": 128,
-    "network_name": "LSTM_fixed_len",
+    "network_name": "LSTM_Network",
     "network_params": {
         "embedding_dim": 30,
         "hidden_dim": 100,

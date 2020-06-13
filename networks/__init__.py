@@ -1,1 +1,1 @@
-from networks.lstm import LSTM_fixed_len
+from networks.lstm import LSTM_Network
