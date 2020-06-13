@@ -7,8 +7,8 @@ import copy
 
 def train_network(network, config, observer=observers.EmptyObserver()):
     device = helpers.get_device()
-    network.to(device)
-    optimizer = optim.SGD(network.parameters(), lr=config.lr, momentum=config.momentum)
+    network.cuda()
+    optimizer = optim.Adam(network.parameters(), lr=config.lr)
     min_loss = float('inf')
     min_loss_network = None
     for epoch in range(config.epochs):
