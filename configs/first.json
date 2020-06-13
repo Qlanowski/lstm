@@ -1,0 +1,18 @@
+{
+    "seed": 123,
+    "split_frac": 0.7,
+    "batch_size": 128,
+    "network_name": "LSTM_fixed_len",
+    "network_params": {
+        "embedding_dim": 30,
+        "hidden_dim": 100,
+        "classes":30
+    },
+    "criterion": "CrossEntropyLoss",
+    "optim_name": "SGD",
+    "optim_params": {
+        "lr": 0.001,
+        "momentum": 0.9
+    },
+    "epochs": 10
+}
