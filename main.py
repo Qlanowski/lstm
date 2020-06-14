@@ -33,11 +33,7 @@ def main(conf_files):
     data = dataloaders.loader.load_train()
 
     test_labels = {
-        "yes", "no", "up", "down", 
-        "left", "right", "on", "off", 
-        "stop", "go", "zero", "one", 
-        "two", "three", "four", "five", 
-        "six", "seven", "eight", "nine",
+        "yes", "no", "up", "down", "left", "right", "on", "off", "stop", "go",
         "silence"
     }
     idx_to_label = {
