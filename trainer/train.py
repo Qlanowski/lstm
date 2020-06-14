@@ -15,7 +15,7 @@ def train_network(
     epochs,
     train_set_loader,
     validation_set_loader,
-    observer=observers.EmptyObserver()
+    observer=observers.TrainingObserver()
     ):
     device = __get_device()
     network.to(device)
