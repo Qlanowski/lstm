@@ -1,9 +1,9 @@
 import torch
 from torch import nn
 class LSTM_Network(torch.nn.Module) :
-    def __init__(self, embedding_dim, hidden_dim, classes, num_layers=1):
+    def __init__(self, embedding_dim, hidden_dim, classes, **lstm_kwargs):
         super().__init__()
-        self.lstm = nn.LSTM(input_size=embedding_dim, hidden_size=hidden_dim, num_layers=num_layers, batch_first=True)
+        self.lstm = nn.LSTM(input_size=embedding_dim, hidden_size=hidden_dim, **lstm_kwargs)
         self.linear = nn.Linear(hidden_dim, classes)
         
     def forward(self, x):
