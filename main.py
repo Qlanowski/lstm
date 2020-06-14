@@ -1,4 +1,5 @@
 import sys
+import os
 import dataloaders.loader
 import networks
 import trainer
@@ -30,12 +31,17 @@ def __set_seed(seed):
 
 def main(conf_files):
     data = dataloaders.loader.load_train()
+
     for conf_file in conf_files:
         with open(conf_file) as conf_json:
             conf = json.load(conf_json)
+
         __set_seed(conf["seed"])
+
         train_set, valid_set = dataloaders.loader.split_random(data, frac=conf["split_frac"])
         network = getattr(networks, conf["network_name"])(**conf["network_params"])
+        observer = trainer.CollectObserver()
+
         trainer.train_network(
             network=network,
             criterion=getattr(nn, conf["criterion"])(),
@@ -54,7 +60,18 @@ def main(conf_files):
                 batch_size=conf["batch_size"],
                 shuffle=True
             ),
-            observer=trainer.observers.DummyPrintObserver())
+            observer=observer)
+
+        results_df = observer.get_results()
+        accuracy_fig = trainer.create_accuracy_plot(results_df)
+        loss_fig = trainer.create_loss_plot(results_df)
+
+        results_dir = os.path.join("results", conf["name"])
+        os.makedirs(results_dir, exist_ok=True)
+
+        results_df.to_csv(os.path.join(results_dir, "results.csv"))
+        accuracy_fig.savefig(os.path.join(results_dir, "accuracy.png"))
+        loss_fig.savefig(os.path.join(results_dir, "loss.png"))
     
 
 
