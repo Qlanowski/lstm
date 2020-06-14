@@ -15,7 +15,7 @@ def train_network(
     epochs,
     train_set_loader,
     validation_set_loader,
-    observer=observers.EmptyObserver()
+    observer=observers.TrainingObserver()
     ):
     device = __get_device()
     network.to(device)
@@ -45,7 +45,7 @@ def train_network(
         observer.validation_update(network, epoch, validation_loss, validation_accuracy)
 
         end = time.time()
-        print("Epoch finished in {} s".format(end - start))
+        print("epoch finished in {:.4f}s".format(end - start))
 
         if validation_loss < min_loss:
             min_loss = validation_loss
