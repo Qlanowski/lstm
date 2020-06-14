@@ -18,7 +18,5 @@ for file in files:
     if os.path.exists(src) and not os.path.exists(dst):
         copyfile(src, dst)
         cnt += 1
-    else:
-        print("NOT COPIED", src, dst)
 
 print(f"copied {cnt}/{len(files)}")
