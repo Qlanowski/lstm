@@ -32,6 +32,25 @@ def __set_seed(seed):
 def main(conf_files):
     data = dataloaders.loader.load_train()
 
+    test_labels = {
+        "yes", "no", "up", "down", 
+        "left", "right", "on", "off", 
+        "stop", "go", "zero", "one", 
+        "two", "three", "four", "five", 
+        "six", "seven", "eight", "nine",
+        "silence"
+    }
+    idx_to_label = {
+        data.class_to_idx[label]: label if label in test_labels else "unknown"
+        for label in data.class_to_idx
+    }
+
+    test_data = dataloaders.loader.load_test()
+    test_set_loader = DataLoader(
+        test_data,
+        batch_size=1000
+    )
+
     for conf_file in conf_files:
         with open(conf_file) as conf_json:
             conf = json.load(conf_json)
@@ -42,7 +61,7 @@ def main(conf_files):
         network = getattr(networks, conf["network_name"])(**conf["network_params"])
         observer = trainer.CollectObserver()
 
-        trainer.train_network(
+        best_network = trainer.train_network(
             network=network,
             criterion=getattr(nn, conf["criterion"])(),
             optimizer=getattr(optim, conf["optim_name"])(
@@ -72,6 +91,17 @@ def main(conf_files):
         results_df.to_csv(os.path.join(results_dir, "results.csv"))
         accuracy_fig.savefig(os.path.join(results_dir, "accuracy.png"))
         loss_fig.savefig(os.path.join(results_dir, "loss.png"))
+
+        if "submit" in conf and conf["submit"]:
+            submisssion_df = trainer.get_submission(
+                network=best_network,
+                test_set_loader=test_set_loader,
+                idx_to_label=idx_to_label
+            )
+            submisssion_df.to_csv(
+                os.path.join(results_dir, "submission.csv"), 
+                index=False
+            )
     
 
 

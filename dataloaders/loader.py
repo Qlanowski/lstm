@@ -5,6 +5,18 @@ from torch.utils.data import Subset
 from librosa.feature import mfcc
 from torchvision import transforms
 from torch import Tensor
+import os
+
+
+class TestsetFolder(DatasetFolder):
+    # override the __getitem__ method. this is the method that dataloader calls
+    def __getitem__(self, index): 
+        original_tuple = super(TestsetFolder, self).__getitem__(index)
+        # the image file path
+        path = os.path.basename(self.samples[index][0])
+        # make a new tuple that includes original and the path
+        tuple_with_path = (original_tuple + (path,))
+        return tuple_with_path
 
 
 def load_wavefile(filepath):
@@ -23,6 +35,17 @@ def load_wavefile(filepath):
 def load_train():
     return DatasetFolder(
         root="data/train/audio",
+        loader=load_wavefile,
+        extensions=".wav",
+        transform=transforms.Compose([
+            Tensor
+        ])
+    )
+
+
+def load_test():
+    return TestsetFolder(
+        root="data/test",
         loader=load_wavefile,
         extensions=".wav",
         transform=transforms.Compose([
