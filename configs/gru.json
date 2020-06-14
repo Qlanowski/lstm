@@ -7,13 +7,15 @@
     "network_params": {
         "embedding_dim": 30,
         "hidden_dim": 256,
-        "classes":31,
-        "num_layers": 2
+        "classes":12,
+        "num_layers": 2,
+        "bidirectional": true
     },
     "criterion": "CrossEntropyLoss",
     "optim_name": "Adam",
     "optim_params": {
         "lr": 0.0001
     },
-    "epochs": 10
+    "epochs": 2,
+    "submit":true
 }
