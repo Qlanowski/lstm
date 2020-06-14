@@ -1,22 +1,39 @@
 from shutil import copyfile
 import os
+from scipy.io import wavfile
+import random
+import numpy as np
+
 
 dst_dir = "./data/train/audio/silence"
 os.makedirs(dst_dir, exist_ok=True)
+noise_dir = "./data/train/_background_noise_"
+noise_files = [
+    wavfile.read(os.path.join(noise_dir, file))
+    for file in os.listdir(noise_dir)
+    if file.endswith(".wav")
+]
 
-with open("./cleaning/bad_files.txt", "r") as f:
-    files = f.read().split('\n')
+random.seed(42)
+for i in range(2000):
+    tracks = random.choices(noise_files, k=2)
 
-cnt = 0
-for file in files:
-    src = os.path.join("./full_data/train/audio", file)
-    file_name = "{}_{}".format(
-        os.path.dirname(file),
-        os.path.basename(file)
-    )
-    dst = os.path.join(dst_dir, file_name)
-    if os.path.exists(src) and not os.path.exists(dst):
-        copyfile(src, dst)
-        cnt += 1
+    track1_rate, track1_data = tracks[0]
+    track2_rate, track2_data = tracks[1]
 
-print(f"copied {cnt}/{len(files)}")
+    if track1_rate == track2_rate:
+        rate = track1_rate
+
+        track1_idx = random.randint(0, len(track1_data) - rate)
+        track1_sample = track1_data[track1_idx:track1_idx + rate]
+
+        track2_idx = random.randint(0, len(track2_data) - rate)
+        track2_sample = track2_data[track2_idx:track2_idx + rate]
+
+        track1_c = random.random() % 1
+        track2_c = 1 - track1_c
+        track_mix = (track1_sample * track1_c + track2_sample * track2_c).astype(np.int16)
+
+        filepath = os.path.join(dst_dir, "{}_noise_mix.wav".format(i))
+        wavfile.write(filepath, rate, track_mix)
+        print("{} created".format(filepath))
