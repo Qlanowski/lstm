@@ -87,6 +87,7 @@ def main(conf_files):
         results_df.to_csv(os.path.join(results_dir, "results.csv"))
         accuracy_fig.savefig(os.path.join(results_dir, "accuracy.png"))
         loss_fig.savefig(os.path.join(results_dir, "loss.png"))
+        torch.save(best_network.state_dict(), os.path.join(results_dir, "model.pth"))
 
         if "submit" in conf and conf["submit"]:
             submisssion_df = trainer.get_submission(
