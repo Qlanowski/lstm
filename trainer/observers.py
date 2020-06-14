@@ -27,7 +27,7 @@ class CollectObserver(DummyPrintObserver):
         super().update(network, epoch, iteration, loss)
 
     def validation_update(self, network, epoch, validation_loss, validation_accuracy):
-        super().validation_update(network, epoch, validation_accuracy, validation_loss)
+        super().validation_update(network, epoch, validation_loss, validation_accuracy)
         self.data.loc[epoch] = [validation_accuracy, validation_loss]
 
     def get_results(self):
