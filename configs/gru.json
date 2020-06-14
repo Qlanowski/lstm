@@ -6,7 +6,8 @@
     "network_params": {
         "embedding_dim": 30,
         "hidden_dim": 256,
-        "classes":30
+        "classes":30,
+        "num_layers": 2
     },
     "criterion": "CrossEntropyLoss",
     "optim_name": "Adam",
