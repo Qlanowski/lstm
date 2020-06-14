@@ -2,6 +2,7 @@ import torch
 import trainer.observers as observers
 import copy
 import time
+import pandas as pd
 
 
 def __get_device():
@@ -73,3 +74,29 @@ def get_validation_stats(network, validation_set_loader, criterion):
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
     return loss, correct / total
+
+
+def get_submission(network, test_set_loader, idx_to_label):
+    device = __get_device()
+    network.to(device)
+    results = {
+        "fname": [],
+        "label_idx": [],
+        "label": []
+    }
+
+    with torch.no_grad():
+        for data in test_set_loader:
+            inputs = data[0].to(device)
+            outputs = network(inputs)
+            _, predicted = torch.max(outputs, 1)
+            results["label_idx"] += predicted.tolist()
+            results["fname"] += list(data[2])
+            print("{:6d} records predicted".format(len(results["label_idx"])))
+
+    results["label"] = [
+        idx_to_label[value] 
+        for value in results["label_idx"]
+    ]
+    results_df = pd.DataFrame(results)
+    return results_df.loc[:, ["fname", "label"]]
