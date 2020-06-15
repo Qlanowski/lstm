@@ -1,0 +1,20 @@
+{
+    "name": "gru_test_10lay",
+    "seed": 123,
+    "split_frac": 0.7,
+    "batch_size": 16,
+    "network_name": "GRU_Network",
+    "network_params": {
+        "embedding_dim": 30,
+        "hidden_dim": 1024,
+        "classes": 12,
+        "num_layers": 10,
+        "bidirectional": true
+    },
+    "criterion": "CrossEntropyLoss",
+    "optim_name": "Adam",
+    "optim_params": {
+        "lr": 0.0001
+    },
+    "epochs": 20
+}
