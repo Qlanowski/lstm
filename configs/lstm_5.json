@@ -1,0 +1,20 @@
+{
+    "name": "lstm_5",
+    "seed": 123,
+    "split_frac": 0.7,
+    "batch_size": 16,
+    "network_name": "LSTM_Network",
+    "network_params": {
+        "embedding_dim": 30,
+        "hidden_dim": 100,
+        "num_layers": 3,
+        "classes":12
+    },
+    "criterion": "CrossEntropyLoss",
+    "optim_name": "Adam",
+    "optim_params": {
+        "lr": 0.0001
+    },
+    "epochs": 20,
+    "submit":true
+}
